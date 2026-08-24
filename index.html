@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جرعة آمنة | Safe Dose - Live Sync Medical Assistant</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;600;700;800;900&family=Tajawal:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-ar: 'Cairo', 'Tajawal', -apple-system, sans-serif;
+      --font-en: 'Inter', -apple-system, sans-serif;
+      --font-family: var(--font-ar);
+      
+      /* Royal Ocean Blue System */
+      --blue-dark: #072d61;
+      --blue-primary: #0f62fe;
+      --blue-ocean: #0284c7;
+      --blue-light: #e0edff;
+      --blue-soft: rgba(15, 98, 254, 0.08);
+
+      /* Health Emerald Green */
+      --health-green: #059669;
+      --health-green-bg: #ecfdf5;
+      --health-green-border: #6ee7b7;
+
+      /* Warning Red */
+      --warning-red: #e11d48;
+      --warning-red-bg: #fff1f2;
+      --warning-red-border: #fda4af;
+
+      --bg-app: #f4f7fb;
+      --bg-gradient: linear-gradient(180deg, #eef4fc 0%, #f6f9fc 100%);
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      --bg-input: #f0f5fa;
+      --border-color: #dbe4f0;
+      --border-hover: #0f62fe;
+      --text-primary: #0b192c;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      
+      --shadow-sm: 0 3px 6px rgba(15, 98, 254, 0.04);
+      --shadow-md: 0 10px 25px -4px rgba(15, 98, 254, 0.1);
+      --shadow-lg: 0 16px 32px -8px rgba(7, 45, 97, 0.15);
+      --radius-sm: 12px;
+      --radius-md: 18px;
+      --radius-lg: 24px;
+    }
+
+    [data-theme="dark"] {
+      --bg-app: #070e17;
+      --bg-gradient: linear-gradient(180deg, #050a12 0%, #0a1526 100%);
+      --bg-card: #111d2e;
+      --bg-card-hover: #18283e;
+      --bg-input: #0b1422;
+      --border-color: #1e3048;
+      --border-hover: #38bdf8;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --blue-light: rgba(14, 165, 233, 0.15);
+      --health-green-bg: rgba(5, 150, 105, 0.18);
+      --warning-red-bg: rgba(225, 29, 72, 0.18);
+    }
+
+    html[lang="en"] {
+      --font-family: var(--font-en);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-family); }
+    body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-primary); min-height: 100vh; transition: background 0.3s, color 0.3s; }
+    
+    .mobile-wrapper { max-width: 460px; margin: 1.5rem auto; background: var(--bg-app); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); min-height: 860px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    @media (max-width: 480px) { .mobile-wrapper { margin: 0; border-radius: 0; max-width: 100%; min-height: 100vh; border: none; } }
+
+    /* Top Bar */
+    .top-bar-custom { padding: 1.15rem 1.25rem; background: linear-gradient(135deg, #072d61 0%, #0f62fe 60%, #0284c7 100%); color: #ffffff; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(15, 98, 254, 0.25); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+    .panadol-pill-icon { width: 38px; height: 38px; border-radius: 12px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.35); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+
+    .stitch-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1rem; box-shadow: var(--shadow-sm); transition: all 0.25s ease; }
+    .stitch-card:hover { box-shadow: var(--shadow-md); }
+
+    .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 460px; height: 70px; background: var(--bg-card); border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-around; z-index: 30; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
+    
+    .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-muted); font-size: 0.72rem; font-weight: 700; cursor: pointer; padding: 0.4rem 0.6rem; border-radius: 12px; transition: all 0.2s ease; flex: 1; }
+    .nav-item.active { color: var(--blue-primary); }
+    .nav-item.active .nav-icon-box { background: linear-gradient(135deg, #0f62fe, #0284c7); color: #ffffff; border-radius: 9999px; padding: 0.35rem 0.8rem; box-shadow: 0 4px 12px rgba(15, 98, 254, 0.35); }
+
+    .progress-circle-box { position: relative; width: 115px; height: 115px; margin: 0 auto; }
+    .progress-circle-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+    .progress-circle-bg { fill: none; stroke: var(--border-color); stroke-width: 8; }
+    .progress-circle-fill { fill: none; stroke: url(#sehhaty-grad); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 113; transition: stroke-dashoffset 0.8s ease; }
+
+    .badge-taken { background: var(--health-green-bg); color: var(--health-green); border: 1px solid var(--health-green-border); padding: 0.35rem 0.75rem; border-radius: 9999px; font-weight: 800; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 0.35rem; }
+    .badge-pending { background: var(--warning-red-bg); color: var(--warning-red); border: 1px solid var(--warning-red-border); padding: 0.35rem 0.75rem; border-radius: 9999px; font-weight: 800; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .btn-sehhaty-blue { background: linear-gradient(135deg, #0f62fe 0%, #0284c7 100%); color: #fff; font-weight: 800; font-size: 0.9rem; padding: 0.55rem 1.3rem; border: none; border-radius: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 14px rgba(15, 98, 254, 0.3); }
+    .btn-sehhaty-blue:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15, 98, 254, 0.45); }
+    
+    .btn-sehhaty-red { background: var(--warning-red); color: #fff; font-weight: 800; font-size: 0.88rem; padding: 0.5rem 1rem; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25); }
+    .btn-sehhaty-outline { background: transparent; color: var(--text-secondary); border: 1.5px solid var(--border-color); font-weight: 700; font-size: 0.85rem; padding: 0.45rem 0.9rem; border-radius: 10px; cursor: pointer; }
+    .btn-sehhaty-outline:hover { border-color: var(--blue-primary); color: var(--blue-primary); }
+
+    .input-field { width: 100%; padding: 0.7rem 0.9rem; font-size: 0.92rem; font-weight: 700; border-radius: 10px; border: 1.5px solid var(--border-color); background: var(--bg-input); color: var(--text-primary); outline: none; }
+    .input-field:focus { border-color: var(--blue-primary); }
+
+    .tab-content { display: none; padding: 1rem 1.25rem; flex: 1; overflow-y: auto; padding-bottom: 5.5rem; }
+    .tab-content.active { display: block; animation: fadeIn 0.25s ease forwards; }
+
+    .lang-toggle-btn { background: rgba(255,255,255,0.25); color: #fff; border: 1px solid rgba(255,255,255,0.4); font-size: 0.75rem; font-weight: 900; padding: 0.3rem 0.6rem; border-radius: 9999px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.25rem; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-wrapper">
+    
+    <!-- Top Header Bar with Language Switcher -->
+    <header class="top-bar-custom">
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div class="panadol-pill-icon" title="جرعة آمنة | Safe Dose">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="7" width="18" height="10" rx="5" fill="#ffffff" fill-opacity="0.95" stroke="#ffffff" stroke-width="1.2"/>
+            <path d="M3 12C3 9.23858 5.23858 7 8 7H12V17H8C5.23858 17 3 14.7614 3 12Z" fill="#38bdf8" />
+            <line x1="12" y1="7" x2="12" y2="17" stroke="#ffffff" stroke-width="1.8"/>
+          </svg>
+        </div>
+
+        <div>
+          <div style="font-size: 1.2rem; font-weight: 900; letter-spacing: -0.2px; line-height: 1.15;">
+            جرعة آمنة <span style="font-size: 0.85rem; font-weight: 700; opacity: 0.9; font-family: sans-serif; display: inline-block;">| Safe Dose</span>
+          </div>
+          <div id="txt-header-sub" style="font-size: 0.72rem; opacity: 0.9; font-weight: 700;">حاسبة الجرعات والتنبيهات الطبية</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.35rem; align-items: center;">
+        <button onclick="toggleLanguage()" class="lang-toggle-btn" title="تغيير اللغة / Switch Language">
+          🌐 <span id="txt-lang-toggle-label">English</span>
+        </button>
+        <button onclick="openCalcModal()" style="background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.4); font-size: 0.75rem; font-weight: 800; padding: 0.3rem 0.6rem; border-radius: 9999px; cursor: pointer;">
+          🧮
+        </button>
+      </div>
+    </header>
+
+    <!-- TAB 1: HOME SCREEN -->
+    <main id="tab-home" class="tab-content active">
+      
+      <!-- User Greeting & Vitals Summary -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <div id="user-avatar-badge" style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #072d61, #0f62fe); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(15, 98, 254, 0.25);">
+            ف
+          </div>
+          <div>
+            <h2 id="user-greeting-text" style="font-size: 1.2rem; font-weight: 900; margin: 0; color: var(--text-primary);">مرحباً، فاطمة 👋</h2>
+            <p id="user-vitals-summary" style="font-size: 0.8rem; color: var(--blue-primary); margin: 0; font-weight: 800;">
+              أنثى 👩 • 42 سنة • 68 كجم
+            </p>
+          </div>
+        </div>
+        <button id="txt-btn-calc-quick" onclick="openCalcModal()" class="btn-sehhaty-outline" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">
+          🧮 حساب الجرعة
+        </button>
+      </div>
+
+      <!-- Vitals Bar Widget -->
+      <div class="stitch-card" style="background: var(--blue-soft); border: 1.5px solid var(--blue-ocean); padding: 0.85rem 1rem; display: flex; justify-content: space-around; text-align: center; margin-bottom: 1rem;">
+        <div>
+          <div id="txt-lbl-weight" style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">الوزن</div>
+          <div id="widget-weight-text" style="font-size: 1.05rem; font-weight: 900; color: var(--blue-primary);">68 كجم</div>
+        </div>
+        <div style="border-right: 1px solid var(--border-color); border-left: 1px solid var(--border-color); padding: 0 1rem;">
+          <div id="txt-lbl-age" style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">العمر</div>
+          <div id="widget-age-text" style="font-size: 1.05rem; font-weight: 900; color: var(--blue-primary);">42 سنة</div>
+        </div>
+        <div>
+          <div id="txt-lbl-gender" style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">الجنس</div>
+          <div id="widget-gender-text" style="font-size: 1.05rem; font-weight: 900; color: var(--blue-primary);">أنثى 👩</div>
+        </div>
+      </div>
+
+      <!-- Quick Interaction Checker Banner -->
+      <div class="stitch-card" style="background: linear-gradient(135deg, var(--bg-card) 0%, rgba(2, 132, 199, 0.04) 100%); border: 1px solid var(--border-color); text-align: center; padding: 1rem;">
+        <h3 id="txt-checker-banner-title" style="font-size: 1rem; font-weight: 900; color: var(--blue-primary); margin-bottom: 0.35rem;">⚡ فاحص التداخلات الدوائية الشامل</h3>
+        <p id="txt-checker-banner-desc" style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 700; margin-bottom: 0.75rem;">
+          تحقق فوراً من تعارض 25+ دواءً بناءً على عمر وجنس ووزن المريض
+        </p>
+        <button id="txt-btn-checker-start" onclick="openCheckerModal()" class="btn-sehhaty-blue" style="width: 100%; font-size: 0.88rem;">
+          🔍 ابدأ فحص التداخل الدوائي الآن
+        </button>
+      </div>
+
+      <!-- Daily Progress Summary Ring Card with Live Synchronized Date -->
+      <div class="stitch-card" style="text-align: center; padding: 1.5rem 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 id="txt-progress-title" style="font-size: 1.05rem; font-weight: 900; margin: 0; color: var(--text-primary);">مؤشر الجرعات اليومية</h3>
+          <!-- LIVE SYNCHRONIZED DATE DISPLAY -->
+          <span id="txt-progress-date" style="font-size: 0.78rem; background: var(--blue-light); color: var(--blue-primary); padding: 0.25rem 0.75rem; border-radius: 9999px; font-weight: 900;">
+            <!-- Dynamic Date -->
+          </span>
+        </div>
+
+        <div class="progress-circle-box">
+          <svg class="progress-circle-svg" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="sehhaty-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0f62fe" />
+                <stop offset="100%" stop-color="#0284c7" />
+              </linearGradient>
+            </defs>
+            <circle class="progress-circle-bg" cx="50" cy="50" r="45" />
+            <circle id="progress-circle-fill" class="progress-circle-fill" cx="50" cy="50" r="45" />
+          </svg>
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+            <div id="progress-counter-text" style="font-size: 1.5rem; font-weight: 900; color: var(--blue-primary);">3/5</div>
+            <div id="txt-lbl-taken-sub" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">تم أخذها</div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 1.25rem;">
+          <span id="badge-taken-count" class="badge-taken">✓ 3 جرعات مكتملة</span>
+          <span id="badge-pending-count" class="badge-pending">⚠️ 2 جرعة متبقية</span>
+        </div>
+      </div>
+
+      <!-- Upcoming Doses Section -->
+      <div style="margin-top: 1.5rem;">
+        <h3 id="txt-upcoming-title" style="font-size: 1.05rem; font-weight: 900; margin-bottom: 0.85rem;">جدول الجرعات القادمة</h3>
+
+        <div class="stitch-card" style="display: flex; justify-content: space-between; align-items: center; border-right: 4px solid var(--blue-primary);">
+          <div>
+            <div style="font-size: 1.1rem; font-weight: 900; color: var(--text-primary);">ليسينوبريل (Lisinopril)</div>
+            <p id="txt-dose1-desc" style="font-size: 0.85rem; color: var(--text-muted); margin: 0; font-weight: 700;">10 ملغ - حبة واحدة (علاج الضغط)</p>
+            <div id="txt-dose1-time" style="font-size: 0.78rem; color: var(--blue-primary); font-weight: 800; margin-top: 0.4rem;">⏰ 8:00 صباحاً (بعد الأكل)</div>
+          </div>
+          <button id="btn-dose-1" onclick="toggleDose(1)" class="btn-sehhaty-blue">
+            أخذ
+          </button>
+        </div>
+
+        <div class="stitch-card" style="display: flex; justify-content: space-between; align-items: center; border-right: 4px solid var(--blue-ocean);">
+          <div>
+            <div style="font-size: 1.1rem; font-weight: 900; color: var(--text-primary);">إنسولين (Insulin)</div>
+            <p id="txt-dose2-desc" style="font-size: 0.85rem; color: var(--text-muted); margin: 0; font-weight: 700;">12 وحدة - حقنة قلم</p>
+            <div id="txt-dose2-time" style="font-size: 0.78rem; color: var(--blue-primary); font-weight: 800; margin-top: 0.4rem;">⏰ 2:00 مساءً (قبل الغداء)</div>
+          </div>
+          <button id="btn-dose-2" onclick="toggleDose(2)" class="btn-sehhaty-outline">
+            تأكيد
+          </button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- TAB 2: SCHEDULE SCREEN WITH LIVE SYNCHRONIZED CALENDAR -->
+    <main id="tab-schedule" class="tab-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <button onclick="navigateWeek(-1)" class="btn-sehhaty-outline" style="border-radius: 50%; padding: 0.3rem 0.6rem;">▶</button>
+        <h2 id="txt-schedule-month" style="font-size: 1.15rem; font-weight: 900; margin: 0; color: var(--blue-primary);">
+          <!-- Live Synchronized Month Year -->
+        </h2>
+        <button onclick="navigateWeek(1)" class="btn-sehhaty-outline" style="border-radius: 50%; padding: 0.3rem 0.6rem;">◀</button>
+      </div>
+
+      <!-- Live Dynamic 7-Day Calendar Strip -->
+      <div id="live-day-strip-container" style="display: flex; justify-content: space-between; gap: 0.35rem; margin-bottom: 1.5rem; background: var(--bg-card); padding: 0.75rem 0.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <!-- Dynamically rendered 7 days centered on today -->
+      </div>
+
+      <h3 id="schedule-day-heading" style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.85rem;">
+        <!-- Live Selected Day Heading -->
+      </h3>
+
+      <div class="stitch-card" style="border-right: 4px solid var(--health-green);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+          <span id="txt-sched-dose1-status" style="font-size: 0.75rem; background: var(--health-green-bg); color: var(--health-green); padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 800;">8:00 صباحاً - تم الأخذ</span>
+          <span>✅</span>
+        </div>
+        <h4 style="font-size: 1.1rem; font-weight: 800; margin: 0.2rem 0;">أملوديبين (Amlodipine)</h4>
+        <p id="txt-sched-dose1-desc" style="font-size: 0.85rem; color: var(--text-muted); margin: 0; font-weight: 600;">حبة واحدة (5 ملغ) - لضغط الدم</p>
+      </div>
+
+      <div class="stitch-card" style="border-right: 4px solid var(--blue-primary);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+          <span id="txt-sched-dose2-status" style="font-size: 0.75rem; background: var(--blue-light); color: var(--blue-primary); padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 800;">2:00 مساءً - متبقية</span>
+          <span>⭕</span>
+        </div>
+        <h4 style="font-size: 1.1rem; font-weight: 800; margin: 0.2rem 0;">باراسيتامول (Paracetamol)</h4>
+        <p id="txt-sched-dose2-desc" style="font-size: 0.85rem; color: var(--text-muted); margin: 0; font-weight: 600;">500 ملغ - خافض حرارة (بندول)</p>
+      </div>
+    </main>
+
+    <!-- TAB 3: ALERTS SCREEN -->
+    <main id="tab-alerts" class="tab-content">
+      <h2 id="txt-alerts-main-title" style="font-size: 1.25rem; font-weight: 900; margin-bottom: 1rem; color: var(--warning-red);">التنبيهات والجرعات الطارئة 🚨</h2>
+
+      <div style="background: var(--warning-red-bg); border: 1.5px solid var(--warning-red-border); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+          <div style="background: var(--warning-red); color: #fff; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">🚨</div>
+          <h3 id="txt-missed-alert-title" style="font-size: 1.1rem; font-weight: 900; margin: 0; color: var(--warning-red);">تحذير: جرعة فائتة ⚠️</h3>
+        </div>
+        <p id="txt-missed-alert-body" style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 700; margin: 0 0 1rem 0; line-height: 1.5;">
+          تنبيه: لقد رُصد تأخر جرعة **أموكسيسيلين (Amoxicillin) 500mg** في موعدها (8:00 صباحاً). يرجى أخذ الجرعة فوراً وتفادي التكرار.
+        </p>
+        <div style="display: flex; gap: 0.6rem;">
+          <button id="btn-missed-alert" onclick="confirmMissedDose()" class="btn-sehhaty-red" style="flex: 1;">
+            تأكيد الأخذ الآن
+          </button>
+          <button id="txt-btn-snooze" class="btn-sehhaty-outline" style="background: #fff;">تأجيل 15 دقيقة</button>
+        </div>
+      </div>
+
+      <div style="background: var(--blue-light); border: 1.5px solid var(--blue-ocean); border-radius: var(--radius-md); padding: 1.25rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+          <div style="background: var(--blue-primary); color: #fff; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">💊</div>
+          <h3 id="txt-refill-alert-title" style="font-size: 1.1rem; font-weight: 900; margin: 0; color: var(--blue-primary);">تذكير بإعادة تعبئة الدواء</h3>
+        </div>
+        <p id="txt-refill-alert-body" style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 700; margin: 0 0 1rem 0; line-height: 1.5;">
+          دواء **ليسينوبريل 10mg (Lisinopril)** يوشك على النفاد (متبقي 3 أيام).
+        </p>
+        <button id="btn-refill-alert" onclick="requestRefill()" class="btn-sehhaty-blue" style="width: 100%;">
+          طلب إعادة التعبئة 💊
+        </button>
+      </div>
+    </main>
+
+    <!-- TAB 4: PROFILE SCREEN -->
+    <main id="tab-profile" class="tab-content">
+      <h2 id="txt-profile-main-title" style="font-size: 1.25rem; font-weight: 900; margin-bottom: 1rem; color: var(--blue-primary);">الملف الشخصي والبيانات الحيوية 👤</h2>
+
+      <div class="stitch-card">
+        <div id="profile-view-mode" style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 0.85rem;">
+            <div id="profile-initial-circle" style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #072d61, #0f62fe); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.4rem; font-weight: 900; box-shadow: 0 4px 12px rgba(15, 98, 254, 0.25);">
+              ف
+            </div>
+            <div>
+              <h3 id="profile-display-name" style="font-size: 1.15rem; font-weight: 900; margin: 0;">فاطمة أحمد</h3>
+              <div id="profile-display-vitals" style="font-size: 0.82rem; color: var(--blue-primary); font-weight: 800; margin-top: 0.15rem;">
+                أنثى 👩 • 42 سنة • 68 كجم
+              </div>
+              <span id="profile-display-condition" style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; display: block;">مريضة سكري - النوع الثاني</span>
+            </div>
+          </div>
+          <button id="txt-btn-profile-edit" onclick="toggleProfileEdit(true)" class="btn-sehhaty-outline" style="font-size: 0.8rem; padding: 0.35rem 0.75rem;">
+            ✏️ تعديل
+          </button>
+        </div>
+
+        <div id="profile-edit-mode" style="display: none; background: var(--bg-input); padding: 1rem; border-radius: 12px; border: 1.5px solid var(--blue-primary);">
+          <h4 id="txt-profile-edit-title" style="font-size: 0.95rem; font-weight: 900; margin-bottom: 0.75rem; color: var(--blue-primary);">✏️ تعديل البيانات الشخصية والحيوية</h4>
+          
+          <div style="margin-bottom: 0.65rem;">
+            <label id="txt-lbl-patient-name" style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.2rem;">اسم المريض:</label>
+            <input id="input-profile-name" type="text" class="input-field" value="فاطمة أحمد" />
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.65rem;">
+            <div style="flex: 1;">
+              <label id="txt-lbl-weight-input" style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.2rem;">الوزن (كجم):</label>
+              <input id="input-profile-weight" type="number" class="input-field" value="68" />
+            </div>
+            <div style="flex: 1;">
+              <label id="txt-lbl-age-input" style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.2rem;">العمر (سنوات):</label>
+              <input id="input-profile-age" type="number" class="input-field" value="42" />
+            </div>
+          </div>
+
+          <div style="margin-bottom: 0.65rem;">
+            <label id="txt-lbl-gender-input" style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.2rem;">جنس المريض:</label>
+            <select id="input-profile-gender" class="input-field">
+              <option value="female" selected>أنثى 👩 / Female</option>
+              <option value="male">ذكر 👨 / Male</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <label id="txt-lbl-condition-input" style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 0.2rem;">الحالة الصحية / التشخيص:</label>
+            <input id="input-profile-condition" type="text" class="input-field" value="مريضة سكري - النوع الثاني" />
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button id="txt-btn-save-vitals" onclick="saveProfile()" class="btn-sehhaty-blue" style="flex: 1; padding: 0.45rem;">💾 حفظ البيانات الحيوية</button>
+            <button id="txt-btn-cancel-vitals" onclick="toggleProfileEdit(false)" class="btn-sehhaty-outline" style="background: #fff;">إلغاء</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emergency Contacts Card -->
+      <div class="stitch-card" style="border-top: 3px solid var(--warning-red);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+          <h4 id="txt-emergency-title" style="font-size: 0.95rem; font-weight: 900; margin: 0; color: var(--warning-red);">
+            🚨 قائمة جهات وأرقام الطوارئ
+          </h4>
+          <button id="txt-btn-add-contact-toggle" onclick="toggleAddContactForm()" class="btn-sehhaty-outline" style="font-size: 0.78rem; padding: 0.25rem 0.65rem; border-color: var(--blue-primary); color: var(--blue-primary);">
+            ➕ إضافة رقم
+          </button>
+        </div>
+
+        <div id="add-contact-form" style="display: none; background: var(--bg-input); padding: 0.85rem; border-radius: 12px; border: 1.5px solid var(--blue-primary); margin-bottom: 1rem;">
+          <h5 id="txt-add-contact-head" style="font-size: 0.88rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--blue-primary);">إضافة رقم طوارئ جديد</h5>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.75rem;">
+            <input id="input-new-name" type="text" placeholder="الاسم (مثال: د. علي / الأخ)" class="input-field" />
+            <input id="input-new-relation" type="text" placeholder="الصفة / القرابة (مثال: طبيب الأسرة)" class="input-field" />
+            <input id="input-new-phone" type="tel" placeholder="رقم الهاتف (مثال: 0501234567)" class="input-field" />
+          </div>
+          <button id="txt-btn-submit-contact" onclick="submitNewContact()" class="btn-sehhaty-blue" style="width: 100%; padding: 0.45rem;">
+            ➕ إضافة للقائمة
+          </button>
+        </div>
+
+        <div id="contacts-list-container" style="display: flex; flex-direction: column; gap: 0.65rem;">
+        </div>
+      </div>
+
+      <!-- Settings & Language Switcher -->
+      <div class="stitch-card">
+        <h4 id="txt-settings-title" style="font-size: 0.95rem; font-weight: 900; margin-bottom: 0.85rem;">المظهر واللغة</h4>
+        
+        <!-- Language Switcher Option -->
+        <div style="margin-bottom: 1rem;">
+          <label style="font-size: 0.85rem; font-weight: 800; display: block; margin-bottom: 0.4rem;" id="txt-lbl-lang-select">لغة التطبيق / App Language:</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <button onclick="setLanguage('ar')" id="btn-lang-ar" class="btn-sehhaty-blue" style="flex: 1; padding: 0.5rem;">🇸🇦 العربية (RTL)</button>
+            <button onclick="setLanguage('en')" id="btn-lang-en" class="btn-sehhaty-outline" style="flex: 1; padding: 0.5rem;">🇬🇧 English (LTR)</button>
+          </div>
+        </div>
+
+        <!-- Dark/Light Theme -->
+        <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+          <label style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; border-radius: 10px; background: var(--blue-light); border: 1.5px solid var(--blue-primary); cursor: pointer;">
+            <span id="txt-theme-light" style="font-weight: 800; color: var(--blue-primary);">☀️ الوضع الفاتح (Light Mode)</span>
+            <input type="radio" name="themeRadio" value="light" checked onclick="setTheme('light')" style="accent-color: var(--blue-primary);" />
+          </label>
+          <label style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.85rem; border-radius: 10px; background: var(--bg-input); border: 1.5px solid var(--border-color); cursor: pointer;">
+            <span id="txt-theme-dark" style="font-weight: 800;">🌙 الوضع الداكن (Dark Mode)</span>
+            <input type="radio" name="themeRadio" value="dark" onclick="setTheme('dark')" style="accent-color: var(--blue-primary);" />
+          </label>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button onclick="switchTab('profile', this)" class="nav-item">
+        <div class="nav-icon-box">👤</div>
+        <span id="nav-lbl-profile">الملف الشخصي</span>
+      </button>
+      <button onclick="switchTab('alerts', this)" class="nav-item">
+        <div class="nav-icon-box">🔔</div>
+        <span id="nav-lbl-alerts">التنبيهات</span>
+      </button>
+      <button onclick="switchTab('schedule', this)" class="nav-item">
+        <div class="nav-icon-box">📅</div>
+        <span id="nav-lbl-schedule">الجدول</span>
+      </button>
+      <button onclick="switchTab('home', this)" class="nav-item active">
+        <div class="nav-icon-box">🏠</div>
+        <span id="nav-lbl-home">الرئيسية</span>
+      </button>
+    </nav>
+
+    <!-- Drug Interaction Checker Modal -->
+    <div id="checker-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); z-index: 120; align-items: center; justify-content: center; padding: 1rem;">
+      <div class="stitch-card" style="max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; border: 2px solid var(--blue-primary);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.6rem;">
+          <h3 id="txt-checker-modal-head" style="font-size: 1.15rem; font-weight: 900; margin: 0; color: var(--blue-primary);">⚡ فاحص التداخلات الدوائية الشامل</h3>
+          <button onclick="closeCheckerModal()" style="background: none; border: none; cursor: pointer; font-size: 1.2rem; font-weight: 900; color: var(--text-muted);">✕</button>
+        </div>
+
+        <div style="margin-bottom: 0.85rem;">
+          <label id="txt-lbl-drug1" style="display: block; font-size: 0.88rem; font-weight: 800; margin-bottom: 0.3rem;">اختر الدواء الأول:</label>
+          <select id="select-drug-1" class="input-field" onchange="runInteractionCheck()"></select>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <label id="txt-lbl-drug2" style="display: block; font-size: 0.88rem; font-weight: 800; margin-bottom: 0.3rem;">اختر الدواء الثاني المتزامن:</label>
+          <select id="select-drug-2" class="input-field" onchange="runInteractionCheck()"></select>
+        </div>
+
+        <div id="checker-result-box" style="padding: 1rem; border-radius: 12px; background: var(--bg-input); border: 1.5px solid var(--border-color); font-weight: 700; margin-bottom: 1rem;">
+        </div>
+
+        <button id="txt-btn-close-checker" onclick="closeCheckerModal()" class="btn-sehhaty-outline" style="width: 100%;">إغلاق الفاحص</button>
+      </div>
+    </div>
+
+    <!-- Enhanced Dose Calculator Modal -->
+    <div id="calc-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(5px); z-index: 110; align-items: center; justify-content: center; padding: 1rem;">
+      <div class="stitch-card" style="max-width: 400px; width: 100%; max-height: 90vh; overflow-y: auto; border: 2px solid var(--blue-primary);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+          <h3 id="txt-calc-modal-head" style="font-size: 1.1rem; font-weight: 900; margin: 0; color: var(--blue-primary);">🧮 حاسبة الجرعات السريرية الدقيقة</h3>
+          <button onclick="closeCalcModal()" style="background: none; border: none; cursor: pointer; font-weight: 900; font-size: 1.2rem;">✕</button>
+        </div>
+
+        <div style="margin-bottom: 0.85rem;">
+          <label id="txt-lbl-calc-drug" style="display: block; font-size: 0.85rem; font-weight: 800; margin-bottom: 0.25rem;">اختر الدواء المراد حساب جرعته:</label>
+          <select id="calc-select-drug" class="input-field">
+            <option value="paracetamol" selected>باراسيتامول (Paracetamol / Panadol)</option>
+            <option value="ibuprofen">إيبوبروفين (Ibuprofen / Brufen)</option>
+            <option value="amoxicillin">أموكسيسيلين (Amoxicillin / Amoxil)</option>
+            <option value="augmentin">أوجمنتين (Augmentin)</option>
+            <option value="lisinopril">ليسينوبريل (Lisinopril)</option>
+            <option value="amlodipine">أملوديبين (Amlodipine)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.85rem;">
+          <div style="flex: 1;">
+            <label id="txt-lbl-calc-w" style="display: block; font-size: 0.82rem; font-weight: 800; margin-bottom: 0.25rem;">الوزن (كجم):</label>
+            <input id="calc-input-weight" type="number" value="68" class="input-field" style="text-align: center; font-weight: 900; font-size: 1.05rem;" />
+          </div>
+          <div style="flex: 1;">
+            <label id="txt-lbl-calc-a" style="display: block; font-size: 0.82rem; font-weight: 800; margin-bottom: 0.25rem;">العمر (سنوات):</label>
+            <input id="calc-input-age" type="number" value="42" class="input-field" style="text-align: center; font-weight: 900; font-size: 1.05rem;" />
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <label id="txt-lbl-calc-g" style="display: block; font-size: 0.82rem; font-weight: 800; margin-bottom: 0.25rem;">جنس المريض:</label>
+          <select id="calc-select-gender" class="input-field">
+            <option value="female" selected>أنثى 👩 / Female</option>
+            <option value="male">ذكر 👨 / Male</option>
+          </select>
+        </div>
+
+        <button id="txt-btn-calc-execute" onclick="calculateModalDose()" class="btn-sehhaty-blue" style="width: 100%;">
+          ⚡ احسب الجرعة السريرية الدقيقة
+        </button>
+
+        <div id="modal-calc-result" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--blue-light); border-radius: 12px; border: 1.5px solid var(--blue-ocean);">
+          <div id="modal-result-title" style="font-size: 1.15rem; font-weight: 900; color: var(--blue-primary); margin-bottom: 0.25rem;"></div>
+          <div id="modal-result-detail" style="font-size: 0.88rem; color: var(--text-primary); font-weight: 700; line-height: 1.5;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentLang = 'ar';
+    let selectedDate = new Date(); // REAL LIVE SYNCHRONIZED DATE
+
+    let patientVitals = {
+      name: 'فاطمة أحمد',
+      weight: 68,
+      age: 42,
+      gender: 'female',
+      condition: 'مريضة سكري - النوع الثاني'
+    };
+
+    const TRANSLATIONS = {
+      ar: {
+        headerSub: 'حاسبة الجرعات والتنبيهات الطبية',
+        greetingPrefix: 'مرحباً، ',
+        btnQuickCalc: '🧮 حساب الجرعة',
+        lblWeight: 'الوزن',
+        lblAge: 'العمر',
+        lblGender: 'الجنس',
+        unitKg: 'كجم',
+        unitYears: 'سنة',
+        genderFemale: 'أنثى 👩',
+        genderMale: 'ذكر 👨',
+        checkerBannerTitle: '⚡ فاحص التداخلات الدوائية الشامل',
+        checkerBannerDesc: 'تحقق فوراً من تعارض 25+ دواءً بناءً على عمر وجنس ووزن المريض',
+        btnCheckerStart: '🔍 ابدأ فحص التداخل الدوائي الآن',
+        progressTitle: 'مؤشر الجرعات اليومية',
+        lblTakenSub: 'تم أخذها',
+        takenCount: '✓ 3 جرعات مكتملة',
+        pendingCount: '⚠️ 2 جرعة متبقية',
+        upcomingTitle: 'جدول الجرعات القادمة',
+        btnTake: 'أخذ',
+        btnConfirm: 'تأكيد',
+        navHome: 'الرئيسية',
+        navSchedule: 'الجدول',
+        navAlerts: 'التنبيهات',
+        navProfile: 'الملف الشخصي',
+        alertsMainTitle: 'التنبيهات والجرعات الطارئة 🚨',
+        missedAlertTitle: 'تحذير: جرعة فائتة ⚠️',
+        missedAlertBody: 'تنبيه: لقد رُصد تأخر جرعة أموكسيسيلين (Amoxicillin) 500mg في موعدها (8:00 صباحاً). يرجى أخذ الجرعة فوراً.',
+        btnTakeNow: 'تأكيد الأخذ الآن',
+        btnSnooze: 'تأجيل 15 دقيقة',
+        refillAlertTitle: 'تذكير بإعادة تعبئة الدواء',
+        refillAlertBody: 'دواء ليسينوبريل 10mg (Lisinopril) يوشك على النفاد (متبقي 3 أيام).',
+        btnRefillRequest: 'طلب إعادة التعبئة 💊',
+        profileMainTitle: 'الملف الشخصي والبيانات الحيوية 👤',
+        btnEdit: '✏️ تعديل',
+        profileEditTitle: '✏️ تعديل البيانات الشخصية والحيوية',
+        lblPatientName: 'اسم المريض:',
+        lblConditionInput: 'الحالة الصحية / التشخيص:',
+        btnSaveVitals: '💾 حفظ البيانات الحيوية',
+        btnCancelVitals: 'إلغاء',
+        emergencyTitle: '🚨 قائمة جهات وأرقام الطوارئ',
+        btnAddContactToggle: '➕ إضافة رقم',
+        addContactHead: 'إضافة رقم طوارئ جديد',
+        btnSubmitContact: '➕ إضافة للقائمة',
+        settingsTitle: 'المظهر واللغة',
+        lblLangSelect: 'لغة التطبيق / App Language:',
+        themeLight: '☀️ الوضع الفاتح (Light Mode)',
+        themeDark: '🌙 الوضع الداكن (Dark Mode)',
+        checkerModalHead: '⚡ فاحص التداخلات الدوائية الشامل',
+        lblDrug1: 'اختر الدواء الأول:',
+        lblDrug2: 'اختر الدواء الثاني المتزامن:',
+        btnCloseChecker: 'إغلاق الفاحص',
+        calcModalHead: '🧮 حاسبة الجرعات السريرية الدقيقة',
+        lblCalcDrug: 'اختر الدواء المراد حساب جرعته:',
+        btnCalcExecute: '⚡ احسب الجرعة السريرية الدقيقة'
+      },
+      en: {
+        headerSub: 'Dose Calculator & Medical Alerts',
+        greetingPrefix: 'Welcome, ',
+        btnQuickCalc: '🧮 Calculate Dose',
+        lblWeight: 'Weight',
+        lblAge: 'Age',
+        lblGender: 'Gender',
+        unitKg: 'kg',
+        unitYears: 'yrs',
+        genderFemale: 'Female 👩',
+        genderMale: 'Male 👨',
+        checkerBannerTitle: '⚡ Clinical Drug Interaction Checker',
+        checkerBannerDesc: 'Check instant interactions for 25+ drugs based on age, gender & weight',
+        btnCheckerStart: '🔍 Start Drug Interaction Check',
+        progressTitle: 'Daily Dose Progress',
+        lblTakenSub: 'Doses Taken',
+        takenCount: '✓ 3 Completed Doses',
+        pendingCount: '⚠️ 2 Remaining Doses',
+        upcomingTitle: 'Upcoming Doses Schedule',
+        btnTake: 'Take',
+        btnConfirm: 'Confirm',
+        navHome: 'Home',
+        navSchedule: 'Schedule',
+        navAlerts: 'Alerts',
+        navProfile: 'Profile',
+        alertsMainTitle: 'Alerts & Emergency Doses 🚨',
+        missedAlertTitle: 'Warning: Missed Dose ⚠️',
+        missedAlertBody: 'Alert: Amoxicillin 500mg dose was missed at 8:00 AM. Please take it immediately.',
+        btnTakeNow: 'Confirm Taken Now',
+        btnSnooze: 'Snooze 15 Mins',
+        refillAlertTitle: 'Medication Refill Reminder',
+        refillAlertBody: 'Lisinopril 10mg is running low (3 days remaining).',
+        btnRefillRequest: 'Request Refill 💊',
+        profileMainTitle: 'Patient Profile & Vitals 👤',
+        btnEdit: '✏️ Edit',
+        profileEditTitle: '✏️ Edit Profile & Vitals',
+        lblPatientName: 'Patient Name:',
+        lblConditionInput: 'Health Condition / Diagnosis:',
+        btnSaveVitals: '💾 Save Vitals',
+        btnCancelVitals: 'Cancel',
+        emergencyTitle: '🚨 Emergency Contacts List',
+        btnAddContactToggle: '➕ Add Contact',
+        addContactHead: 'Add New Emergency Contact',
+        btnSubmitContact: '➕ Add to List',
+        settingsTitle: 'Appearance & Language',
+        lblLangSelect: 'App Language / لغة التطبيق:',
+        themeLight: '☀️ Light Mode',
+        themeDark: '🌙 Dark Mode',
+        checkerModalHead: '⚡ Clinical Drug Interaction Checker',
+        lblDrug1: 'Select First Drug:',
+        lblDrug2: 'Select Concurrent Drug:',
+        btnCloseChecker: 'Close Checker',
+        calcModalHead: '🧮 Precision Dose Calculator',
+        lblCalcDrug: 'Select Drug to Calculate:',
+        btnCalcExecute: '⚡ Calculate Precision Dose'
+      }
+    };
+
+    // Live Date Synchronizer Engine
+    function syncLiveDate() {
+      const today = selectedDate;
+      
+      // Arabic & English Month formatting
+      const arMonths = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+      const enMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      
+      const arDays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+      const enDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+      const arDaysShort = ['أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت'];
+      const enDaysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+      const dNum = today.getDate();
+      const mIdx = today.getMonth();
+      const yNum = today.getFullYear();
+      const dayIdx = today.getDay();
+
+      // Home Screen Date Badge
+      const dateBadgeStr = currentLang === 'ar' 
+        ? `${dNum} ${arMonths[mIdx]} ${yNum}`
+        : `${dNum} ${enMonths[mIdx]} ${yNum}`;
+      document.getElementById('txt-progress-date').innerText = dateBadgeStr;
+
+      // Schedule Month Year Title
+      const monthYearStr = currentLang === 'ar'
+        ? `${arMonths[mIdx]} ${yNum} - جرعة آمنة`
+        : `${enMonths[mIdx]} ${yNum} - Safe Dose`;
+      document.getElementById('txt-schedule-month').innerText = monthYearStr;
+
+      // Schedule Selected Day Heading
+      const headingStr = currentLang === 'ar'
+        ? `📅 جدول اليوم (${arDays[dayIdx]}، ${dNum} ${arMonths[mIdx]})`
+        : `📅 Today's Schedule (${enDays[dayIdx]}, ${enMonths[mIdx]} ${dNum})`;
+      document.getElementById('schedule-day-heading').innerText = headingStr;
+
+      // Dynamically render 7-Day Live Strip centered on selectedDate
+      const stripContainer = document.getElementById('live-day-strip-container');
+      stripContainer.innerHTML = '';
+
+      for (let i = -3; i <= 3; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+
+        const isToday = i === 0;
+        const dDate = d.getDate();
+        const dDayIdx = d.getDay();
+
+        const btn = document.createElement('button');
+        btn.className = `day-strip-btn ${isToday ? 'active-day' : ''}`;
+        btn.style.cssText = `
+          flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0.5rem 0.2rem;
+          border-radius: 12px; border: none; cursor: pointer; font-weight: 800;
+          background: ${isToday ? 'linear-gradient(135deg, #0f62fe, #0284c7)' : 'transparent'};
+          color: ${isToday ? '#ffffff' : 'var(--text-primary)'};
+        `;
+
+        btn.onclick = () => {
+          selectedDate = d;
+          syncLiveDate();
+        };
+
+        btn.innerHTML = `
+          <span style="font-size:0.72rem; opacity:${isToday ? '0.9' : '0.6'};">
+            ${currentLang === 'ar' ? arDaysShort[dDayIdx] : enDaysShort[dDayIdx]}
+          </span>
+          <span style="font-size:1rem;">${dDate}</span>
+        `;
+
+        stripContainer.appendChild(btn);
+      }
+    }
+
+    function navigateWeek(direction) {
+      selectedDate.setDate(selectedDate.getDate() + (direction * 7));
+      syncLiveDate();
+    }
+
+    const EXTENSIVE_DRUGS = [
+      { id: 'paracetamol', name: 'باراسيتامول (Panadol / Paracetamol)', category: 'Analgesic & Antipyretic' },
+      { id: 'ibuprofen', name: 'إيبوبروفين (Brufen / Ibuprofen)', category: 'NSAID / Pain Relief' },
+      { id: 'aspirin', name: 'أسبرين (Aspirin)', category: 'Blood Thinner / NSAID' },
+      { id: 'diclofenac', name: 'ديكلوفيناك (Voltaren)', category: 'NSAID' },
+      { id: 'tramadol', name: 'ترامادول (Tramadol)', category: 'Opioid Analgesic' },
+      { id: 'naproxen', name: 'نابروكسين (Naprosyn)', category: 'NSAID' },
+      { id: 'amoxicillin', name: 'أموكسيسيلين (Amoxil)', category: 'Antibiotic' },
+      { id: 'augmentin', name: 'أوجمنتين (Augmentin)', category: 'Antibiotic' },
+      { id: 'ciprofloxacin', name: 'سيبروفلوكساسين (Cipro)', category: 'Antibiotic' },
+      { id: 'clarithromycin', name: 'كلاريثروميسين (Klacid)', category: 'Antibiotic' },
+      { id: 'fluconazole', name: 'فلوكونازول (Diflucan)', category: 'Antifungal' },
+      { id: 'metronidazole', name: 'مترونيدازول (Flagyl)', category: 'Antibacterial / Antiprotozoal' },
+      { id: 'azithromycin', name: 'أزيثروميسين (Zithromax)', category: 'Antibiotic' },
+      { id: 'warfarin', name: 'وارفارين (Coumadin)', category: 'Anticoagulant' },
+      { id: 'clopidogrel', name: 'كلوپيدوجريل (Plavix)', category: 'Antiplatelet' },
+      { id: 'lisinopril', name: 'ليسينوبريل (Zestril)', category: 'ACE Inhibitor (BP)' },
+      { id: 'amlodipine', name: 'أملوديبين (Norvasc)', category: 'Calcium Channel Blocker' },
+      { id: 'propranolol', name: 'بروبرانولول (Inderal)', category: 'Beta Blocker' },
+      { id: 'furosemide', name: 'فوريوسيمايد (Lasix)', category: 'Diuretic' },
+      { id: 'insulin', name: 'إنسولين (Insulin)', category: 'Antidiabetic' },
+      { id: 'metformin', name: 'ميتفورمين (Glucophage)', category: 'Antidiabetic' },
+      { id: 'glimepiride', name: 'جليميبريد (Amaryl)', category: 'Antidiabetic' },
+      { id: 'salbutamol', name: 'سالبوتامول (Ventolin)', category: 'Bronchodilator' },
+      { id: 'omeprazole', name: 'أوميبرازول (Losec)', category: 'Proton Pump Inhibitor' },
+      { id: 'antacids', name: 'مضادات الحموضة (Maalox)', category: 'Antacid' },
+      { id: 'fluoxetine', name: 'فلوكسيتين (Prozac)', category: 'SSRI Antidepressant' },
+      { id: 'diazepam', name: 'ديازيبام (Valium)', category: 'Anxiolytic / Sedative' }
+    ];
+
+    const INTERACTIONS_MATRIX = [
+      { d1: 'ibuprofen', d2: 'aspirin', level: 'danger', titleAr: 'تداخل خطير جداً 🚨', titleEn: 'Severe Danger 🚨', noteAr: 'الإيبوبروفين يعطل المفعول الحامي للقلب للشرايين للأسبرين كلياً، ويزيد خطر نزيف المعدة.', noteEn: 'Ibuprofen blocks aspirin cardioprotection and quadruples GI bleeding risk.' },
+      { d1: 'warfarin', d2: 'aspirin', level: 'danger', titleAr: 'تداخل مميت 🚨', titleEn: 'Lethal Risk 🚨', noteAr: 'مضاعفة شديدة لتمييع الدم تؤدي إلى نزيف داخلي حاد ونزيف في الدماغ.', noteEn: 'Severe hemorrhage risk due to synergistic anticoagulant & antiplatelet effect.' },
+      { d1: 'warfarin', d2: 'ibuprofen', level: 'danger', titleAr: 'تداخل خطير 🚨', titleEn: 'High Bleeding Risk 🚨', noteAr: 'الإيبوبروفين يسبب خدش جدار المعدة مع الوارفارين، مما ينتج عنه نزيف معدي حاد.', noteEn: 'NSAIDs cause gastric erosion and inhibit warfarin metabolism causing severe bleeding.' },
+      { d1: 'warfarin', d2: 'fluconazole', level: 'danger', titleAr: 'تداخل شديد 🚨', titleEn: 'Toxicity Danger 🚨', noteAr: 'الفلوكونازول يثبط إنزيم الكبد (CYP2C9) المسئول عن تكسير الوارفارين، مما يرفع نسبته 3 أضعاف.', noteEn: 'Fluconazole inhibits CYP2C9, tripling warfarin blood levels and causing severe bleeding.' },
+      { d1: 'clopidogrel', d2: 'omeprazole', level: 'danger', titleAr: 'إلغاء المفعول 🚨', titleEn: 'Efficacy Loss 🚨', noteAr: 'أوميبرازول يمنع تحول البلافيكس لصورته النشطة، مما يترك المريض بدون حماية من الجلطات.', noteEn: 'Omeprazole inhibits activation of Plavix, exposing patient to stent thrombosis.' },
+      { d1: 'salbutamol', d2: 'propranolol', level: 'danger', titleAr: 'تداخل حاد 🚨', titleEn: 'Severe Bronchospasm 🚨', noteAr: 'بروبرانولول يغلق مستقبلات الرئة ويمنع الفنتولين من فتح الشعب الهوائية، مما يسبب نوبة ربو حادة.', noteEn: 'Non-selective beta blockers block Ventolin receptors causing severe bronchospasm.' },
+      { d1: 'amlodipine', d2: 'clarithromycin', level: 'warning', titleAr: 'تنبيه هبوط ضغط ⚠️', titleEn: 'Hypotension Warning ⚠️', noteAr: 'الكلاسيد يرفع مستوى الأملوديبين في الدم ويسبب هبوطاً حاداً في ضغط الدم.', noteEn: 'Clarithromycin inhibits amlodipine clearance causing severe hypotension and edema.' },
+      { d1: 'ciprofloxacin', d2: 'antacids', level: 'warning', titleAr: 'تعطيل الامتصاص ⚠️', titleEn: 'Absorption Block ⚠️', noteAr: 'مضادات الحموضة ترتبط بالسيبروفلوكساسين وتمنع امتصاصه في الأمعاء تماماً.', noteEn: 'Antacid cations chelate Ciprofloxacin reducing bio-availability by up to 90%.' }
+    ];
+
+    let doses = [
+      { id: 1, name: 'ليسينوبريل (Lisinopril)', detail: '10 ملغ - حبة واحدة', time: '8:00 صباحاً (بعد الأكل)', taken: false },
+      { id: 2, name: 'إنسولين (Insulin)', detail: '12 وحدة - حقنة', time: '2:00 مساءً (قبل الغداء)', taken: false },
+      { id: 3, name: 'أملوديبين (Amlodipine)', detail: '5 ملغ', time: '8:00 صباحاً', taken: true },
+      { id: 4, name: 'باراسيتامول (Paracetamol)', detail: '500 ملغ', time: '12:00 ظهراً', taken: true },
+      { id: 5, name: 'سيتريزين (Cetirizine)', detail: '10 ملغ', time: '10:00 مساءً', taken: true }
+    ];
+
+    let emergencyContacts = [
+      { id: 1, name: 'د. محمد علي', relation: 'طبيب العائلة', phone: '050-987-6543', icon: '🚨' },
+      { id: 2, name: 'أحمد (الابن)', relation: 'مرافق أول', phone: '050-123-4567', icon: '📞' }
+    ];
+
+    let editingContactId = null;
+
+    function toggleLanguage() {
+      setLanguage(currentLang === 'ar' ? 'en' : 'ar');
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      const t = TRANSLATIONS[lang];
+
+      document.documentElement.setAttribute('lang', lang);
+      document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+      document.getElementById('txt-lang-toggle-label').innerText = lang === 'ar' ? 'English' : 'العربية';
+      document.getElementById('txt-header-sub').innerText = t.headerSub;
+
+      document.getElementById('txt-btn-calc-quick').innerText = t.btnQuickCalc;
+      document.getElementById('txt-lbl-weight').innerText = t.lblWeight;
+      document.getElementById('txt-lbl-age').innerText = t.lblAge;
+      document.getElementById('txt-lbl-gender').innerText = t.lblGender;
+
+      document.getElementById('txt-checker-banner-title').innerText = t.checkerBannerTitle;
+      document.getElementById('txt-checker-banner-desc').innerText = t.checkerBannerDesc;
+      document.getElementById('txt-btn-checker-start').innerText = t.btnCheckerStart;
+
+      document.getElementById('txt-progress-title').innerText = t.progressTitle;
+      document.getElementById('txt-lbl-taken-sub').innerText = t.lblTakenSub;
+      document.getElementById('badge-taken-count').innerText = t.takenCount;
+      document.getElementById('badge-pending-count').innerText = t.pendingCount;
+
+      document.getElementById('txt-upcoming-title').innerText = t.upcomingTitle;
+      document.getElementById('btn-dose-1').innerText = t.btnTake;
+      document.getElementById('btn-dose-2').innerText = t.btnConfirm;
+
+      document.getElementById('nav-lbl-home').innerText = t.navHome;
+      document.getElementById('nav-lbl-schedule').innerText = t.navSchedule;
+      document.getElementById('nav-lbl-alerts').innerText = t.navAlerts;
+      document.getElementById('nav-lbl-profile').innerText = t.navProfile;
+
+      document.getElementById('txt-alerts-main-title').innerText = t.alertsMainTitle;
+      document.getElementById('txt-missed-alert-title').innerText = t.missedAlertTitle;
+      document.getElementById('txt-missed-alert-body').innerText = t.missedAlertBody;
+      document.getElementById('btn-missed-alert').innerText = t.btnTakeNow;
+      document.getElementById('txt-btn-snooze').innerText = t.btnSnooze;
+
+      document.getElementById('txt-refill-alert-title').innerText = t.refillAlertTitle;
+      document.getElementById('txt-refill-alert-body').innerText = t.refillAlertBody;
+      document.getElementById('btn-refill-alert').innerText = t.btnRefillRequest;
+
+      document.getElementById('txt-profile-main-title').innerText = t.profileMainTitle;
+      document.getElementById('txt-btn-profile-edit').innerText = t.btnEdit;
+      document.getElementById('txt-profile-edit-title').innerText = t.profileEditTitle;
+      document.getElementById('txt-lbl-patient-name').innerText = t.lblPatientName;
+      document.getElementById('txt-lbl-weight-input').innerText = `${t.lblWeight} (${t.unitKg}):`;
+      document.getElementById('txt-lbl-age-input').innerText = `${t.lblAge} (${t.unitYears}):`;
+      document.getElementById('txt-lbl-gender-input').innerText = `${t.lblGender}:`;
+      document.getElementById('txt-lbl-condition-input').innerText = t.lblConditionInput;
+      document.getElementById('txt-btn-save-vitals').innerText = t.btnSaveVitals;
+      document.getElementById('txt-btn-cancel-vitals').innerText = t.btnCancelVitals;
+
+      document.getElementById('txt-emergency-title').innerText = t.emergencyTitle;
+      document.getElementById('txt-btn-add-contact-toggle').innerText = t.btnAddContactToggle;
+      document.getElementById('txt-add-contact-head').innerText = t.addContactHead;
+      document.getElementById('txt-btn-submit-contact').innerText = t.btnSubmitContact;
+
+      document.getElementById('txt-settings-title').innerText = t.settingsTitle;
+      document.getElementById('txt-lbl-lang-select').innerText = t.lblLangSelect;
+      document.getElementById('txt-theme-light').innerText = t.themeLight;
+      document.getElementById('txt-theme-dark').innerText = t.themeDark;
+
+      document.getElementById('txt-checker-modal-head').innerText = t.checkerModalHead;
+      document.getElementById('txt-lbl-drug1').innerText = t.lblDrug1;
+      document.getElementById('txt-lbl-drug2').innerText = t.lblDrug2;
+      document.getElementById('txt-btn-close-checker').innerText = t.btnCloseChecker;
+
+      document.getElementById('txt-calc-modal-head').innerText = t.calcModalHead;
+      document.getElementById('txt-lbl-calc-drug').innerText = t.lblCalcDrug;
+      document.getElementById('txt-lbl-calc-w').innerText = `${t.lblWeight} (${t.unitKg}):`;
+      document.getElementById('txt-lbl-calc-a').innerText = `${t.lblAge} (${t.unitYears}):`;
+      document.getElementById('txt-lbl-calc-g').innerText = `${t.lblGender}:`;
+      document.getElementById('txt-btn-calc-execute').innerText = t.btnCalcExecute;
+
+      syncLiveDate();
+      saveProfile(false);
+      runInteractionCheck();
+    }
+
+    function initDrugOptions() {
+      const s1 = document.getElementById('select-drug-1');
+      const s2 = document.getElementById('select-drug-2');
+      s1.innerHTML = ''; s2.innerHTML = '';
+
+      EXTENSIVE_DRUGS.forEach(d => {
+        const opt1 = document.createElement('option');
+        opt1.value = d.id; opt1.text = `${d.name} (${d.category})`;
+        s1.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = d.id; opt2.text = `${d.name} (${d.category})`;
+        s2.appendChild(opt2);
+      });
+
+      s2.selectedIndex = 1;
+      runInteractionCheck();
+    }
+
+    function runInteractionCheck() {
+      const id1 = document.getElementById('select-drug-1').value;
+      const id2 = document.getElementById('select-drug-2').value;
+      const box = document.getElementById('checker-result-box');
+
+      if (id1 === id2) {
+        box.style.border = '1px solid var(--border-color)';
+        box.style.background = 'var(--bg-input)';
+        box.innerHTML = `<span style="color: var(--text-muted); font-weight:700;">${currentLang === 'ar' ? 'اختر دوائين مختلفين.' : 'Please select two different drugs.'}</span>`;
+        return;
+      }
+
+      const match = INTERACTIONS_MATRIX.find(i => (i.d1 === id1 && i.d2 === id2) || (i.d1 === id2 && i.d2 === id1));
+
+      if (match) {
+        let bg = 'var(--warning-red-bg)';
+        let border = 'var(--warning-red-border)';
+        let textColor = 'var(--warning-red)';
+
+        if (match.level === 'warning') {
+          bg = 'rgba(245, 158, 11, 0.15)';
+          border = '#f59e0b';
+          textColor = '#b45309';
+        }
+
+        box.style.background = bg;
+        box.style.border = `1.5px solid ${border}`;
+        box.style.color = textColor;
+        box.innerHTML = `
+          <div style="font-size: 1.15rem; font-weight: 900; margin-bottom: 0.4rem;">${currentLang === 'ar' ? match.titleAr : match.titleEn}</div>
+          <div style="font-size: 0.9rem; font-weight: 700; line-height: 1.5; color: var(--text-primary);">${currentLang === 'ar' ? match.noteAr : match.noteEn}</div>
+        `;
+      } else {
+        box.style.background = 'var(--health-green-bg)';
+        box.style.border = '1.5px solid var(--health-green-border)';
+        box.style.color = 'var(--health-green)';
+        box.innerHTML = `
+          <div style="font-size: 1.05rem; font-weight: 900; margin-bottom: 0.3rem;">${currentLang === 'ar' ? '✅ لا يظهر تداخل مباشر حاد متداول' : '✅ No Major Known Direct Interaction'}</div>
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary);">${currentLang === 'ar' ? 'الدوائين المحددين لا يتعارضان بشكل مباشر في قواعد التداخلات الشائعة.' : 'Selected drugs do not show direct interaction in common clinical rules.'}</div>
+        `;
+      }
+    }
+
+    function openCheckerModal() {
+      document.getElementById('checker-modal').style.display = 'flex';
+    }
+
+    function closeCheckerModal() {
+      document.getElementById('checker-modal').style.display = 'none';
+    }
+
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById('tab-' + tabId).classList.add('active');
+      btnElement.classList.add('active');
+    }
+
+    function updateProgressRing() {
+      const taken = doses.filter(d => d.taken).length;
+      const total = doses.length;
+      const percent = Math.round((taken / total) * 100);
+      const dashoffset = 283 - (283 * percent) / 100;
+
+      document.getElementById('progress-circle-fill').style.strokeDashoffset = dashoffset;
+      document.getElementById('progress-counter-text').innerText = `${taken}/${total}`;
+    }
+
+    function toggleDose(id) {
+      const dose = doses.find(d => d.id === id);
+      if (dose) {
+        dose.taken = !dose.taken;
+        const btn = document.getElementById('btn-dose-' + id);
+        const t = TRANSLATIONS[currentLang];
+        if (dose.taken) {
+          btn.className = 'badge-taken';
+          btn.innerText = `✓ ${t.btnTake}`;
+        } else {
+          btn.className = (id === 1 ? 'btn-sehhaty-blue' : 'btn-sehhaty-outline');
+          btn.innerText = (id === 1 ? t.btnTake : t.btnConfirm);
+        }
+        updateProgressRing();
+      }
+    }
+
+    function confirmMissedDose() {
+      const btn = document.getElementById('btn-missed-alert');
+      btn.innerText = currentLang === 'ar' ? '✓ تم تأكيد الأخذ بنجاح' : '✓ Taken Confirmed Successfully';
+      btn.style.background = '#059669';
+    }
+
+    function requestRefill() {
+      const btn = document.getElementById('btn-refill-alert');
+      btn.innerText = currentLang === 'ar' ? '✓ تم إرسال طلب التعبئة بنجاح' : '✓ Refill Requested Successfully';
+      btn.style.background = '#059669';
+    }
+
+    function toggleProfileEdit(show) {
+      document.getElementById('profile-view-mode').style.display = show ? 'none' : 'flex';
+      document.getElementById('profile-edit-mode').style.display = show ? 'block' : 'none';
+    }
+
+    function saveProfile(closeForm = true) {
+      const name = document.getElementById('input-profile-name').value.trim();
+      const weight = parseFloat(document.getElementById('input-profile-weight').value) || 68;
+      const age = parseInt(document.getElementById('input-profile-age').value) || 42;
+      const gender = document.getElementById('input-profile-gender').value;
+      const condition = document.getElementById('input-profile-condition').value.trim();
+
+      if (!name) return;
+
+      patientVitals = { name, weight, age, gender, condition };
+
+      const t = TRANSLATIONS[currentLang];
+      const genderText = gender === 'female' ? t.genderFemale : t.genderMale;
+      const vitalsStr = `${genderText} • ${age} ${t.unitYears} • ${weight} ${t.unitKg}`;
+
+      document.getElementById('profile-display-name').innerText = name;
+      document.getElementById('profile-display-vitals').innerText = vitalsStr;
+      document.getElementById('profile-display-condition').innerText = condition;
+
+      document.getElementById('user-greeting-text').innerText = `${t.greetingPrefix}${name.split(' ')[0]} 👋`;
+      document.getElementById('user-vitals-summary').innerText = vitalsStr;
+
+      document.getElementById('widget-weight-text').innerText = `${weight} ${t.unitKg}`;
+      document.getElementById('widget-age-text').innerText = `${age} ${t.unitYears}`;
+      document.getElementById('widget-gender-text').innerText = genderText;
+
+      document.getElementById('profile-initial-circle').innerText = name.charAt(0);
+      document.getElementById('user-avatar-badge').innerText = name.charAt(0);
+
+      document.getElementById('calc-input-weight').value = weight;
+      document.getElementById('calc-input-age').value = age;
+      document.getElementById('calc-select-gender').value = gender;
+
+      if (closeForm) toggleProfileEdit(false);
+    }
+
+    function renderEmergencyContacts() {
+      const container = document.getElementById('contacts-list-container');
+      container.innerHTML = '';
+
+      emergencyContacts.forEach(c => {
+        const div = document.createElement('div');
+        div.style.cssText = 'background: var(--bg-input); padding: 0.75rem 0.85rem; border-radius: 12px; border: 1px solid var(--border-color);';
+
+        if (editingContactId !== c.id) {
+          div.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 0.55rem;">
+                <div style="font-size: 1.2rem;">${c.icon}</div>
+                <div>
+                  <div style="font-size: 0.88rem; font-weight: 800;">${c.name}</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">
+                    ${c.relation} • <span style="color: var(--blue-primary); direction: ltr; display: inline-block;">${c.phone}</span>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.35rem;">
+                <a href="tel:${c.phone}" style="text-decoration: none; background: var(--health-green-bg); color: var(--health-green); padding: 0.35rem 0.6rem; border-radius: 8px; font-size: 0.8rem; font-weight: 800;">📞 Call</a>
+                <button onclick="startEditContact(${c.id})" style="background: none; border: none; cursor: pointer; font-size: 0.85rem;">✏️</button>
+                <button onclick="deleteContact(${c.id})" style="background: none; border: none; cursor: pointer; font-size: 0.85rem;">🗑️</button>
+              </div>
+            </div>
+          `;
+        } else {
+          div.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+              <input id="edit-c-name-${c.id}" type="text" class="input-field" value="${c.name}" />
+              <input id="edit-c-rel-${c.id}" type="text" class="input-field" value="${c.relation}" />
+              <input id="edit-c-phone-${c.id}" type="tel" class="input-field" value="${c.phone}" />
+              <div style="display: flex; gap: 0.4rem; margin-top: 0.3rem;">
+                <button onclick="saveContactEdit(${c.id})" class="btn-sehhaty-blue" style="flex: 1; padding: 0.35rem; font-size: 0.8rem;">Save</button>
+                <button onclick="cancelContactEdit()" class="btn-sehhaty-outline" style="background: #fff; font-size: 0.8rem;">Cancel</button>
+              </div>
+            </div>
+          `;
+        }
+
+        container.appendChild(div);
+      });
+    }
+
+    function toggleAddContactForm() {
+      const form = document.getElementById('add-contact-form');
+      form.style.display = (form.style.display === 'none' || !form.style.display) ? 'block' : 'none';
+    }
+
+    function submitNewContact() {
+      const name = document.getElementById('input-new-name').value.trim();
+      const relation = document.getElementById('input-new-relation').value.trim();
+      const phone = document.getElementById('input-new-phone').value.trim();
+
+      if (!name || !phone) return;
+
+      emergencyContacts.push({
+        id: Date.now(),
+        name: name,
+        relation: relation || 'Emergency',
+        phone: phone,
+        icon: '📞'
+      });
+
+      document.getElementById('input-new-name').value = '';
+      document.getElementById('input-new-relation').value = '';
+      document.getElementById('input-new-phone').value = '';
+      toggleAddContactForm();
+      renderEmergencyContacts();
+    }
+
+    function startEditContact(id) {
+      editingContactId = id;
+      renderEmergencyContacts();
+    }
+
+    function cancelContactEdit() {
+      editingContactId = null;
+      renderEmergencyContacts();
+    }
+
+    function saveContactEdit(id) {
+      const name = document.getElementById('edit-c-name-' + id).value.trim();
+      const relation = document.getElementById('edit-c-rel-' + id).value.trim();
+      const phone = document.getElementById('edit-c-phone-' + id).value.trim();
+
+      if (!name || !phone) return;
+
+      const contact = emergencyContacts.find(c => c.id === id);
+      if (contact) {
+        contact.name = name;
+        contact.relation = relation;
+        contact.phone = phone;
+      }
+
+      editingContactId = null;
+      renderEmergencyContacts();
+    }
+
+    function deleteContact(id) {
+      emergencyContacts = emergencyContacts.filter(c => c.id !== id);
+      renderEmergencyContacts();
+    }
+
+    function setTheme(mode) {
+      document.documentElement.setAttribute('data-theme', mode);
+    }
+
+    function openCalcModal() {
+      document.getElementById('calc-input-weight').value = patientVitals.weight;
+      document.getElementById('calc-input-age').value = patientVitals.age;
+      document.getElementById('calc-select-gender').value = patientVitals.gender;
+      document.getElementById('calc-modal').style.display = 'flex';
+    }
+
+    function closeCalcModal() {
+      document.getElementById('calc-modal').style.display = 'none';
+    }
+
+    function calculateModalDose() {
+      const drugId = document.getElementById('calc-select-drug').value;
+      const weight = parseFloat(document.getElementById('calc-input-weight').value);
+      const age = parseInt(document.getElementById('calc-input-age').value);
+      const gender = document.getElementById('calc-select-gender').value;
+
+      if (!weight || weight <= 0) return;
+
+      const isPediatric = age < 12;
+      const t = TRANSLATIONS[currentLang];
+      const genderLabel = gender === 'female' ? t.genderFemale : t.genderMale;
+      const ageCategoryLabel = isPediatric ? `${currentLang === 'ar' ? 'طفل' : 'Child'} (${age} ${t.unitYears})` : `${currentLang === 'ar' ? 'بالغ' : 'Adult'} (${age} ${t.unitYears})`;
+
+      let mg = 0;
+      let ml = 0;
+      let note = '';
+
+      if (drugId === 'paracetamol') {
+        if (isPediatric) {
+          mg = Math.round(weight * 15);
+          ml = Math.round(((mg * 5) / 120) * 10) / 10;
+          note = currentLang === 'ar' ? `جرعة الأطفال (15 ملغ/كجم): يُعطى ${mg} ملغ (${ml} مل من شراب 120mg/5ml) كل 4-6 ساعات عند الحاجة.` : `Pediatric Dose (15 mg/kg): Administer ${mg} mg (${ml} mL of 120mg/5mL syrup) every 4-6 hrs PRN.`;
+        } else {
+          mg = weight > 50 ? 1000 : 500;
+          note = currentLang === 'ar' ? `جرعة البالغين: ${mg} ملغ (قرص أو قرصين 500mg) كل 6 ساعات عند الحاجة (الحد الأقصى 4,000 ملغ/يومياً).` : `Adult Dose: ${mg} mg (1-2 tablets 500mg) every 6 hrs PRN (Max 4,000 mg/day).`;
+        }
+      } else if (drugId === 'ibuprofen') {
+        if (isPediatric) {
+          mg = Math.round(weight * 10);
+          ml = Math.round(((mg * 5) / 100) * 10) / 10;
+          note = currentLang === 'ar' ? `جرعة الأطفال (10 ملغ/كجم): ${mg} ملغ (${ml} مل من شراب 100mg/5ml) كل 6-8 ساعات بعد الأكل.` : `Pediatric Dose (10 mg/kg): ${mg} mg (${ml} mL of 100mg/5mL syrup) q6-8h with food.`;
+        } else {
+          mg = 400;
+          note = currentLang === 'ar' ? `جرعة البالغين: ${mg} ملغ حبة واحدة بعد الوجبة.` : `Adult Dose: ${mg} mg single tablet after food.`;
+        }
+      } else {
+        mg = isPediatric ? Math.round(weight * 20) : 500;
+        note = currentLang === 'ar' ? `الجرعة المحسوبة لـ (${genderLabel} - ${ageCategoryLabel}): ${mg} ملغ.` : `Calculated dose for (${genderLabel} - ${ageCategoryLabel}): ${mg} mg.`;
+      }
+
+      document.getElementById('modal-result-title').innerText = `${currentLang === 'ar' ? '💊 الجرعة السريرية' : '💊 Clinical Dose'}: ${mg} mg ${ml > 0 ? `(${ml} mL)` : ''}`;
+      document.getElementById('modal-result-detail').innerHTML = `
+        <strong>${currentLang === 'ar' ? 'بيانات المريض:' : 'Patient Vitals:'}</strong> ${genderLabel} • ${ageCategoryLabel} • ${weight} ${t.unitKg}<br/>
+        <strong>${currentLang === 'ar' ? 'الإرشادات السريرية:' : 'Clinical Guidelines:'}</strong> ${note}
+      `;
+      document.getElementById('modal-calc-result').style.display = 'block';
+    }
+
+    initDrugOptions();
+    syncLiveDate();
+    renderEmergencyContacts();
+    updateProgressRing();
+  </script>
+</body>
+</html>
